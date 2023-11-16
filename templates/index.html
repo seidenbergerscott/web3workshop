@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethereum Price Tracker</title>
+</head>
+<body>
+    <h1>Ethereum (ETH) Price</h1>
+    <p>The current price of Ethereum (ETH) is: ${{ eth_price }}</p>
+
+    <!-- Only display the image if it is available -->
+    {% if image_available %}
+    <img src="{{ url_for('static', filename=file_key) }}" alt="Downloaded Image">
+    {% else %}
+    <p>Image not available. Click download to retrieve the image.</p>
+    {% endif %}
+
+    <!-- Button to Download File -->
+    <a href="/download" class="btn btn-primary">Download File</a>
+</body>
+</html>
