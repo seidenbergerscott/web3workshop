@@ -1,143 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>web3 dApp</title>
-    <style>
-        /* Add your CSS styles here */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            width: 100%;
-        }
-        .box {
-            flex: 1;
-            padding: 20px;
-            border: 1px solid #333;
-            border-radius: 8px;
-            background-color: #1e1e1e;
-        }
-        /* ... rest of your CSS ... */
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Static Web3 Demo</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap; /* allows boxes to wrap on smaller screens */
+      gap: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .box {
+      flex: 1;
+      min-width: 280px;
+      padding: 20px;
+      border: 1px solid #333;
+      border-radius: 8px;
+      background-color: #1e1e1e;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 18px;
+      line-height: 1.6;
+      margin: 10px 0;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 20px;
+      background-color: #af594c;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover {
+      background-color: #a04351;
+    }
+    #walletAddress, #walletBalance {
+      margin-top: 10px;
+      font-style: italic;
+      color: #bfbfbf;
+      font-size: 16px;
+    }
+    #ethPriceValue {
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="box">
-            <h1>Ethereum (ETH) Price</h1>
-            <p id="eth-price">Loading...</p>
-        </div>
-        <div class="box">
-            <h1>Download Image</h1>
-            <p>Click the button to download the image.</p>
-            <button id="download-btn" class="btn">Download Image</button>
-            <div id="image-container"></div>
-        </div>
+  <div class="container">
+    <!-- Box for Ethereum Price -->
+    <div class="box">
+      <h1>Ethereum (ETH) Price</h1>
+      <p>The current price of Ethereum (ETH) is: <span id="ethPriceValue">Loading...</span></p>
     </div>
 
-    <script>
-       // This will be executed once the full page is fully loaded
-       window.addEventListener('load', function() {
-            // Check if Web3 has been loaded
-            if (typeof Web3 !== 'undefined') {
-                // Use the browser's Ethereum provider
-                const web3 = new Web3(Web3.givenProvider || "https://rpc.ankr.com/eth_goerli");
+    <!-- Box for Downloading or Viewing an Image -->
+    <div class="box">
+      <h1>Image from Storj</h1>
+      <p>Click below to view/download your Storj-hosted file.</p>
+      <a 
+        href="https://link.storjshare.io/s/jvdugoe4vssshf7irnwpbjencdpa/poap/hacklahomaWeb3Workshop.png" 
+        class="btn" 
+        download
+        target="_blank"
+      >
+        View/Download File
+      </a>
+    </div>
 
-                const aggregatorV3InterfaceABI = [
-                    {
-                        inputs: [],
-                        name: "decimals",
-                        outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
-                        stateMutability: "view",
-                        type: "function",
-                    },
-                    {
-                        inputs: [],
-                        name: "description",
-                        outputs: [{ internalType: "string", name: "", type: "string" }],
-                        stateMutability: "view",
-                        type: "function",
-                    },
-                    {
-                        inputs: [{ internalType: "uint80", name: "_roundId", type: "uint80" }],
-                        name: "getRoundData",
-                        outputs: [
-                        { internalType: "uint80", name: "roundId", type: "uint80" },
-                        { internalType: "int256", name: "answer", type: "int256" },
-                        { internalType: "uint256", name: "startedAt", type: "uint256" },
-                        { internalType: "uint256", name: "updatedAt", type: "uint256" },
-                        { internalType: "uint80", name: "answeredInRound", type: "uint80" },
-                        ],
-                        stateMutability: "view",
-                        type: "function",
-                    },
-                    {
-                        inputs: [],
-                        name: "latestRoundData",
-                        outputs: [
-                        { internalType: "uint80", name: "roundId", type: "uint80" },
-                        { internalType: "int256", name: "answer", type: "int256" },
-                        { internalType: "uint256", name: "startedAt", type: "uint256" },
-                        { internalType: "uint256", name: "updatedAt", type: "uint256" },
-                        { internalType: "uint80", name: "answeredInRound", type: "uint80" },
-                        ],
-                        stateMutability: "view",
-                        type: "function",
-                    },
-                    {
-                        inputs: [],
-                        name: "version",
-                        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-                        stateMutability: "view",
-                        type: "function",
-                    },
-                ];
-                const addr = "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e";
-                const priceFeed = new web3.eth.Contract(aggregatorV3InterfaceABI, addr);
+    <!-- Box for Web3 Login (Connect Wallet) -->
+    <div class="box">
+      <h1>Web3 Login</h1>
+      <button id="connectWalletBtn" class="btn">Connect Wallet</button>
+      <p id="walletAddress"></p>
+      <p id="walletBalance"></p>
+    </div>
+  </div>
 
-                priceFeed.methods.latestRoundData().call().then((roundData) => {
-                    // Now we have the roundData, we can display it
-                    const answer = BigInt(roundData.answer);
-                    const decimals = 1e8; // Define the decimals as a BigInt
-                    const price = answer / BigInt(decimals); // Perform arithmetic with BigInt
-                    const ethPriceElement = document.getElementById('eth-price');
+  <!-- Include web3.js from a CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.1/dist/web3.min.js"></script>
+  
+  <!-- Main Script -->
+  <script>
+    /******************************************************************
+     * 1. Get ETH Price from Chainlink on Sepolia (client-side)
+     ******************************************************************/
+    async function loadEthPrice() {
+      try {
+        // Sepolia aggregator address for ETH/USD:
+        // https://docs.chain.link/data-feeds/price-feeds/addresses
+        const aggregatorAddress = "0x694AA1769357215DE4FAC081bf1f309aDC325306";
+        const aggregatorAbi = [
+          {
+            "inputs": [],
+            "name": "decimals",
+            "outputs": [{ "internalType": "uint8","name":"","type":"uint8"}],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "latestRoundData",
+            "outputs": [
+              {"internalType":"uint80","name":"roundId","type":"uint80"},
+              {"internalType":"int256","name":"answer","type":"int256"},
+              {"internalType":"uint256","name":"startedAt","type":"uint256"},
+              {"internalType":"uint256","name":"updatedAt","type":"uint256"},
+              {"internalType":"uint80","name":"answeredInRound","type":"uint80"}
+            ],
+            "stateMutability":"view",
+            "type":"function"
+          }
+        ];
 
-                    // Convert the final result to a standard JavaScript number for display
-                    const displayPrice = Number(price); 
-                    
-                    if (ethPriceElement) {
-                        ethPriceElement.textContent = `The current price of Ethereum (ETH) is: $${displayPrice.toFixed(2)}`;
-                    }
-                }).catch(error => {
-                    console.error('Error fetching Ethereum price:', error);
-                });
-            } else {
-                console.log('Web3 is not found. Please install MetaMask!');
-            }
+        // Create a temporary Web3 provider (a public Sepolia RPC, or Infura/Alchemy)
+        const tempWeb3 = new Web3("https://sepolia.drpc.org");
+        
+        // Instantiate chainlink aggregator contract
+        const priceFeed = new tempWeb3.eth.Contract(aggregatorAbi, aggregatorAddress);
+        
+        // Call latestRoundData() to get price
+        const roundData = await priceFeed.methods.latestRoundData().call();
+        const answer = roundData.answer; // e.g. 150000000000 => $1500.00
+        const decimals = 8; // for Chainlink ETH/USD feed
+        const price = parseFloat(answer) / (10 ** decimals);
+        
+        document.getElementById("ethPriceValue").textContent = `$${price.toFixed(2)}`;
+      } catch (err) {
+        console.error("Error loading ETH price:", err);
+        document.getElementById("ethPriceValue").textContent = "Error";
+      }
+    }
+
+
+    /******************************************************************
+     * 2. Connect to MetaMask & Show Wallet Info
+     ******************************************************************/
+    const connectWalletBtn = document.getElementById("connectWalletBtn");
+    const walletAddressDisplay = document.getElementById("walletAddress");
+    const walletBalanceDisplay = document.getElementById("walletBalance");
+
+    connectWalletBtn.addEventListener("click", async () => {
+      if (typeof window.ethereum === "undefined") {
+        alert("MetaMask is not installed. Please install it to use this feature.");
+        return;
+      }
+
+      try {
+        // Request account access
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+        const walletAddress = accounts[0];
+
+        // Display wallet address
+        walletAddressDisplay.textContent = "Address: " + walletAddress;
+
+        // Use the same provider for balance, or you can create a new Web3 instance:
+        const web3 = new Web3(window.ethereum);
+        
+        // Get balance (wei, in hex) then convert to Ether
+        const balanceHex = await window.ethereum.request({
+          method: "eth_getBalance",
+          params: [walletAddress, "latest"]
         });
+        const balanceWei = parseInt(balanceHex, 16);
+        const balanceEth = balanceWei / 1e18;
+        
+        // Display balance
+        walletBalanceDisplay.textContent = `Balance: ${balanceEth.toFixed(4)} ETH`;
+      } catch (error) {
+        console.error("Wallet connection failed:", error);
+      }
+    });
 
-        // Event listener for the download button
-        document.getElementById('download-btn').addEventListener('click', function() {
-            const imageUrl = 'https://link.storjshare.io/s/jvhwssk7atr2vbif3jfrvakjhcva/demo-bucket%2Fweb3%20Workshop%20Poap.png?wrap=0';
-            const imageContainer = document.getElementById('image-container');
-            imageContainer.innerHTML = `<img src="${imageUrl}" alt="Downloaded Image" style="max-width: 100%; height: auto; margin-top: 20px;">`;
-        });
-    </script>
 
-
+    /******************************************************************
+     * 3. On page load, fetch ETH price immediately
+     ******************************************************************/
+    loadEthPrice();
+  </script>
 </body>
 </html>
