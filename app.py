@@ -61,6 +61,10 @@ def download_file():
     
     return redirect(url_for('index'))
 
+@app.route('/sign_message')
+def sign_message():
+    return render_template('sign_message.html')
+
 @app.route('/')
 def index():
     eth_price = get_eth_price()

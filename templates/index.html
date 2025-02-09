@@ -1,61 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>web3 dApp</title>
-    <style>
-        /* Add styles here */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            display: flex;
-            gap: 20px;
-        }
-        .box {
-            flex: 1;
-            padding: 20px;
-            border: 1px solid #333;
-            border-radius: 8px;
-            background-color: #1e1e1e;
-        }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        p {
-            font-size: 18px;
-            line-height: 1.6;
-        }
-        img {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 20px;
-            background-color: #af594c;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #a04351;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>web3 dApp</title>
+  <style>
+      body {
+          font-family: 'Arial', sans-serif;
+          background-color: #121212;
+          color: #ffffff;
+          margin: 0;
+          padding: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+      }
+      .container {
+          display: flex;
+          flex-wrap: wrap; /* allows boxes to wrap on smaller screens */
+          gap: 20px;
+          max-width: 1000px;
+          margin: auto;
+      }
+      .box {
+          flex: 1;
+          min-width: 280px;
+          padding: 20px;
+          border: 1px solid #333;
+          border-radius: 8px;
+          background-color: #1e1e1e;
+      }
+      h1 {
+          font-size: 24px;
+          margin-bottom: 20px;
+      }
+      p {
+          font-size: 18px;
+          line-height: 1.6;
+      }
+      img {
+          max-width: 100%;
+          border-radius: 8px;
+          margin-top: 20px;
+      }
+      .btn {
+          display: inline-block;
+          padding: 10px 20px;
+          margin-top: 20px;
+          background-color: #af594c;
+          color: #ffffff;
+          text-decoration: none;
+          border-radius: 5px;
+          transition: background-color 0.3s ease;
+          cursor: pointer;
+          border: none; /* for button elements */
+      }
+      .btn:hover {
+          background-color: #a04351;
+      }
+      /* Extra styling for the Connect Wallet output */
+      #walletAddress, #walletBalance {
+          margin-top: 10px;
+          font-style: italic;
+          color: #bfbfbf;
+          font-size: 16px;
+      }
+  </style>
 </head>
 <body>
     <div class="container">
@@ -74,6 +86,52 @@
             {% endif %}
             <a href="/download" class="btn">Download File</a>
         </div>
+
+        <!-- Box for Web3 Login -->
+        <div class="box">
+            <h1>Web3 Login</h1>
+            <button id="connectWalletBtn" class="btn">Connect Wallet</button>
+            <p id="walletAddress"></p>
+            <p id="walletBalance"></p>
+        </div>
     </div>
+
+    <!-- Web3 Login Script -->
+    <script>
+        const connectWalletBtn = document.getElementById('connectWalletBtn');
+        const walletAddressDisplay = document.getElementById('walletAddress');
+        const walletBalanceDisplay = document.getElementById('walletBalance');
+
+        connectWalletBtn.addEventListener('click', async () => {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    // 1. Request permission to connect to MetaMask
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    const walletAddress = accounts[0];
+                    
+                    // 2. Display the user's wallet address
+                    walletAddressDisplay.textContent = 'Address: ' + walletAddress;
+
+                    // 3. Fetch the balance for that address
+                    //    This returns a hex string, which we'll convert to a decimal
+                    const balanceHex = await window.ethereum.request({
+                        method: 'eth_getBalance',
+                        params: [walletAddress, 'latest']
+                    });
+
+                    // Convert from hex to decimal (wei), then to Ether
+                    const balanceWei = parseInt(balanceHex, 16);
+                    const balanceEth = balanceWei / 1e18;
+
+                    // 4. Display the balance
+                    walletBalanceDisplay.textContent = `Balance: ${balanceEth.toFixed(4)} ETH`;
+                } catch (error) {
+                    console.error('User rejected request or another error:', error);
+                }
+            } else {
+                alert('MetaMask is not installed. Please install it to use this feature.');
+            }
+        });
+    </script>
 </body>
 </html>
