@@ -9,11 +9,11 @@ app = Flask(__name__)
 def get_eth_price():
     # Change this to use your own RPC URL
     # web3 = Web3(Web3.HTTPProvider('https://rpc.ankr.com/eth_goerli'))
-    web3 = Web3(Web3.HTTPProvider('https://eth-goerli.gateway.pokt.network/v1/lb/961ce20a'))
+    web3 = Web3(Web3.HTTPProvider('https://sepolia.drpc.org'))
     # AggregatorV3Interface ABI
     abi = '[{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"description","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint80","name":"_roundId","type":"uint80"}],"name":"getRoundData","outputs":[{"internalType":"uint80","name":"roundId","type":"uint80"},{"internalType":"int256","name":"answer","type":"int256"},{"internalType":"uint256","name":"startedAt","type":"uint256"},{"internalType":"uint256","name":"updatedAt","type":"uint256"},{"internalType":"uint80","name":"answeredInRound","type":"uint80"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"latestRoundData","outputs":[{"internalType":"uint80","name":"roundId","type":"uint80"},{"internalType":"int256","name":"answer","type":"int256"},{"internalType":"uint256","name":"startedAt","type":"uint256"},{"internalType":"uint256","name":"updatedAt","type":"uint256"},{"internalType":"uint80","name":"answeredInRound","type":"uint80"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"version","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]'
     # Price Feed address
-    addr = '0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e'
+    addr = '0x694AA1769357215DE4FAC081bf1f309aDC325306'
 
     # Set up contract instance
     contract = web3.eth.contract(address=addr, abi=abi)
@@ -50,11 +50,11 @@ def download_from_storj_s3(bucket_name, file_key, destination_path, access_key, 
 
 @app.route('/download')
 def download_file():
-    bucket_name = "demo-bucket"
-    file_key = "web3 Workshop Poap.png"
+    bucket_name = "poap"
+    file_key = "hacklahomaWeb3Workshop.png"
     destination_path = "static/poap.png"
-    access_key = "jwxwkd3pirkb77ngtiwxr4ajphoq"
-    secret_key = "j3omtog5wlcyjudtdzq3krxchf5floizwzjinxljtjw77wouuhlpq"
+    access_key = "ju4z45xdwkvoi6hgud6qynory2za"
+    secret_key = "jzslwofv4xd235pbfqb35tdkkojxehdlbwg4gclkmjjlk5fvogyly"
     endpoint_url = "https://gateway.storjshare.io"
 
     download_from_storj_s3(bucket_name, file_key, destination_path, access_key, secret_key, endpoint_url)
